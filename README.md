@@ -66,20 +66,20 @@ Do not put Azure credentials in this repository or in `app.yaml`.
 
 ## Azure mode
 
-Store the Azure Speech region and key outside the repository in
-`~/.config/uno-q-legal-dictation/azure.env`, then limit access to the board's
-`arduino` user:
+Store the Azure Speech region and key in the UNO Q's shared credential directory,
+outside every application repository. Limit access to the board's `arduino` user:
 
 ```bash
-mkdir -p ~/.config/uno-q-legal-dictation
-chmod 700 ~/.config/uno-q-legal-dictation
-nano ~/.config/uno-q-legal-dictation/azure.env
-chmod 600 ~/.config/uno-q-legal-dictation/azure.env
+mkdir -p ~/.config/uno-q/credentials
+chmod 700 ~/.config/uno-q ~/.config/uno-q/credentials
+nano ~/.config/uno-q/credentials/azure-speech.env
+chmod 600 ~/.config/uno-q/credentials/azure-speech.env
 ```
 
-The protected file contains `SPEECH_REGION` and `SPEECH_KEY`. Never print,
-screenshot, or commit it. Run a five-second cloud transcription with the secure
-launcher:
+The protected file `~/.config/uno-q/credentials/azure-speech.env` contains
+`SPEECH_REGION` and `SPEECH_KEY`. Other authorized UNO Q applications can load
+this same file instead of duplicating the key. Never print, screenshot, or commit
+it. Run a five-second cloud transcription with the secure launcher:
 
 ```bash
 scripts/dictate-azure --seconds 5
