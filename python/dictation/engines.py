@@ -13,6 +13,17 @@ class TranscriptionError(RuntimeError):
     pass
 
 
+def load_phrase_hints(path: Path) -> list[str]:
+    if not path.is_file():
+        return []
+
+    return [
+        line
+        for raw_line in path.read_text(encoding="utf-8").splitlines()
+        if (line := raw_line.strip()) and not line.startswith("#")
+    ]
+
+
 class SpeechEngine(ABC):
     @abstractmethod
     def transcribe(self, audio_file: Path) -> str:
@@ -97,6 +108,9 @@ class AzureSpeechEngine(SpeechEngine):
             speech_config=speech_config,
             audio_config=audio_config,
         )
+        phrase_grammar = speechsdk.PhraseListGrammar.from_recognizer(recognizer)
+        for phrase in load_phrase_hints(settings.speech_phrases_file):
+            phrase_grammar.addPhrase(phrase)
         result = recognizer.recognize_once_async().get()
 
         if result.reason == speechsdk.ResultReason.RecognizedSpeech:
@@ -113,4 +127,3 @@ def create_engine(settings: Settings) -> SpeechEngine:
     if settings.mode == "azure":
         return AzureSpeechEngine(settings)
     return WhisperCppEngine(settings)
-

@@ -27,6 +27,10 @@ class SettingsTests(unittest.TestCase):
             settings.whisper_model,
             project_root / "vendor/models/ggml-tiny.en.bin",
         )
+        self.assertEqual(
+            settings.speech_phrases_file,
+            project_root / "config/speech-phrases.txt",
+        )
 
     def test_rejects_unknown_mode(self) -> None:
         with self.assertRaisesRegex(ValueError, "DICTATION_MODE"):

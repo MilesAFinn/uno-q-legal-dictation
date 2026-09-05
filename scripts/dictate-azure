@@ -1,0 +1,26 @@
+#!/bin/sh
+set -eu
+
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+APP_ROOT=$(dirname "$SCRIPT_DIR")
+ENV_FILE=${AZURE_SPEECH_ENV_FILE:-"$HOME/.config/uno-q-legal-dictation/azure.env"}
+PYTHON=${DICTATION_PYTHON:-"$HOME/.venvs/uno-q-legal-dictation/bin/python"}
+
+if [ ! -r "$ENV_FILE" ]; then
+    echo "error: Azure credential file is not readable: $ENV_FILE" >&2
+    exit 1
+fi
+
+if [ ! -x "$PYTHON" ]; then
+    echo "error: dictation Python environment is unavailable: $PYTHON" >&2
+    exit 1
+fi
+
+set -a
+. "$ENV_FILE"
+set +a
+
+# The ALSA card name remains stable if other USB devices change card numbers.
+export ALSA_DEVICE=${ALSA_DEVICE:-"plughw:CARD=Seri,DEV=0"}
+
+exec "$PYTHON" "$APP_ROOT/python/main.py" --mode azure "$@"

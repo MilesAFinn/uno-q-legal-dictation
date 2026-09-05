@@ -13,6 +13,7 @@ class Settings:
     sample_rate: int
     whisper_cli: str
     whisper_model: Path | None
+    speech_phrases_file: Path
 
     @classmethod
     def from_environment(cls, mode: str | None = None) -> "Settings":
@@ -33,4 +34,10 @@ class Settings:
                 "WHISPER_CLI", str(app_root / "vendor/bin/whisper-cli")
             ),
             whisper_model=Path(model).expanduser(),
+            speech_phrases_file=Path(
+                os.getenv(
+                    "SPEECH_PHRASES_FILE",
+                    str(app_root / "config" / "speech-phrases.txt"),
+                )
+            ).expanduser(),
         )

@@ -1,0 +1,25 @@
+# One Azure Speech phrase hint per line. These improve recognition but do not
+# force a particular transcription. This file must never contain credentials.
+Miles Finn
+PatVault
+patvault.com
+United States Patent and Trademark Office
+USPTO
+Patent Trial and Appeal Board
+PTAB
+inter partes review
+post-grant review
+means-plus-function
+antecedent basis
+claim construction
+prosecution history
+file wrapper
+office action
+notice of allowance
+continuation-in-part
+request for continued examination
+MPEP
+35 U.S.C.
+102 rejection
+103 rejection
+112 rejection

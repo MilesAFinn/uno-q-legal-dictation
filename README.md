@@ -45,20 +45,44 @@ python3 python/main.py --list-microphones
 Install the Python dependency used by Azure mode:
 
 ```bash
-python3 -m pip install -r python/requirements.txt
+sudo apt install -y python3-venv
+python3 -m venv ~/.venvs/uno-q-legal-dictation
+~/.venvs/uno-q-legal-dictation/bin/python -m pip install -r python/requirements.txt
 ```
 
 Do not put Azure credentials in this repository or in `app.yaml`.
 
 ## Azure mode
 
-Set the Azure Speech resource region and key in the board's runtime environment:
+Store the Azure Speech region and key outside the repository in
+`~/.config/uno-q-legal-dictation/azure.env`, then limit access to the board's
+`arduino` user:
 
 ```bash
-export SPEECH_REGION="your-region"
-export SPEECH_KEY="your-key"
-python3 python/main.py --mode azure --seconds 5
+mkdir -p ~/.config/uno-q-legal-dictation
+chmod 700 ~/.config/uno-q-legal-dictation
+nano ~/.config/uno-q-legal-dictation/azure.env
+chmod 600 ~/.config/uno-q-legal-dictation/azure.env
 ```
+
+The protected file contains `SPEECH_REGION` and `SPEECH_KEY`. Never print,
+screenshot, or commit it. Run a five-second cloud transcription with the secure
+launcher:
+
+```bash
+scripts/dictate-azure --seconds 5
+```
+
+The launcher uses the stable Plantronics ALSA card name and the isolated Python
+environment. It also accepts normal options such as `--audio-file` and
+`--save-transcript`. `ALSA_DEVICE`, `AZURE_SPEECH_ENV_FILE`, and
+`DICTATION_PYTHON` can override its defaults.
+
+Azure phrase hints are loaded from `config/speech-phrases.txt`. Add one legal,
+patent, client, or proper-name phrase per line; blank lines and lines beginning
+with `#` are ignored. `SPEECH_PHRASES_FILE` can select a different list. Phrase
+hints improve recognition likelihood but do not force Azure to produce specific
+text.
 
 The Python Speech SDK supports Linux ARM64 on supported Debian releases. For a
 production version, replace the long-lived API key with stronger secret handling.
