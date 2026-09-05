@@ -148,9 +148,9 @@ to ASCII. Unsupported symbols become `?`.
 
 ## Planned milestones
 
-1. Prove USB microphone capture on the UNO Q.
-2. Benchmark local `whisper.cpp` transcription.***DEFER***
-3. Configure and test Azure Speech transcription.
+1. Prove USB microphone capture on the UNO Q. *** done *** 
+2. Benchmark local `whisper.cpp` transcription.*** DEFER***
+3. Configure and test Azure Speech transcription.  *** done *** 
 4. Add a physical push-to-talk button and local/cloud selector.
 5. Bench-test CH9328 keyboard output in a disposable text document.
 6. Add an e-ink status and review display.
