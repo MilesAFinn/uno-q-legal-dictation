@@ -130,4 +130,5 @@ to ASCII. Unsupported symbols become `?`.
 4. Add a physical push-to-talk button and local/cloud selector.
 5. Bench-test CH9328 keyboard output in a disposable text document.
 6. Add an e-ink status and review display.
-7. Add CSV timekeeping as a separate module.
+7. Integrate with PatVault.com API "Q send me patent number eight one two three four five six."
+8. Add CSV timekeeping as a separate module.
