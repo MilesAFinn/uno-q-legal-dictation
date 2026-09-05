@@ -20,7 +20,9 @@ from dictation.engines import (
 class EngineFactoryTests(unittest.TestCase):
     def test_creates_azure_engine(self) -> None:
         settings = Settings.from_environment("azure")
-        self.assertIsInstance(create_engine(settings), AzureSpeechEngine)
+        engine = create_engine(settings)
+        self.assertIsInstance(engine, AzureSpeechEngine)
+        self.assertEqual(engine._phrase_hints_file, settings.speech_phrases_file)
 
     def test_local_mode_requires_model(self) -> None:
         settings = replace(Settings.from_environment("local"), whisper_model=None)

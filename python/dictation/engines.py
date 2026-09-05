@@ -82,6 +82,7 @@ class WhisperCppEngine(SpeechEngine):
 class AzureSpeechEngine(SpeechEngine):
     def __init__(self, settings: Settings) -> None:
         self._language = settings.language
+        self._phrase_hints_file = settings.speech_phrases_file
 
     def transcribe(self, audio_file: Path) -> str:
         speech_key = os.getenv("SPEECH_KEY")
@@ -109,7 +110,7 @@ class AzureSpeechEngine(SpeechEngine):
             audio_config=audio_config,
         )
         phrase_grammar = speechsdk.PhraseListGrammar.from_recognizer(recognizer)
-        for phrase in load_phrase_hints(settings.speech_phrases_file):
+        for phrase in load_phrase_hints(self._phrase_hints_file):
             phrase_grammar.addPhrase(phrase)
         result = recognizer.recognize_once_async().get()
 
