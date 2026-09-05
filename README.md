@@ -1,0 +1,132 @@
+# UNO Q Legal Dictation
+
+This Arduino App Lab project captures a short utterance from a USB microphone and
+transcribes it with either a local `whisper.cpp` model or Azure Speech. Temporary
+audio is deleted automatically. An Adafruit CH9328 breakout provides USB keyboard
+output without requiring a Windows companion application. Timekeeping and an
+e-ink display are deferred until the speech pipeline is proven.
+
+## Current milestone
+
+- Capture mono 16 kHz, 16-bit WAV audio through ALSA.
+- Select `local` or `azure` transcription at runtime.
+- Print the transcript to the console.
+- Save a transcript only when `--save-transcript` is supplied.
+- Accept an existing WAV file for testing without a microphone.
+- Optionally type completed text into the focused Windows application.
+
+## Project structure
+
+```text
+uno_q_legal_dictation/
+|-- app.yaml
+|-- data/
+|   `-- input.wav          # optional App Lab file-input slot
+|-- python/
+|   |-- main.py
+|   |-- requirements.txt
+|   `-- dictation/
+|-- sketch/
+|   |-- sketch.ino
+|   `-- sketch.yaml
+`-- tests/
+```
+
+## UNO Q prerequisites
+
+Connect a USB microphone through a powered USB-C hub. On the UNO Q Debian side,
+verify that ALSA can see it:
+
+```bash
+python3 python/main.py --list-microphones
+```
+
+Install the Python dependency used by Azure mode:
+
+```bash
+python3 -m pip install -r python/requirements.txt
+```
+
+Do not put Azure credentials in this repository or in `app.yaml`.
+
+## Azure mode
+
+Set the Azure Speech resource region and key in the board's runtime environment:
+
+```bash
+export SPEECH_REGION="your-region"
+export SPEECH_KEY="your-key"
+python3 python/main.py --mode azure --seconds 5
+```
+
+The Python Speech SDK supports Linux ARM64 on supported Debian releases. For a
+production version, replace the long-lived API key with stronger secret handling.
+
+## Local mode
+
+The app includes an ARM64 `whisper.cpp` executable and the English `tiny.en`
+model. No environment variables or network connection are required:
+
+```bash
+python3 python/main.py --mode local --seconds 5
+```
+
+`WHISPER_CLI` and `WHISPER_MODEL` can still override the bundled files.
+
+## Test with an existing WAV file
+
+```bash
+python3 python/main.py --mode local --audio-file sample.wav
+python3 python/main.py --mode azure --audio-file sample.wav
+```
+
+For the App Lab Run button, place the audio at `data/input.wav`. If that file is
+present, the app transcribes it instead of opening a microphone. Remove or rename
+it to return to microphone capture. `AUDIO_FILE` may also supply a path without a
+command-line argument. Local input must be mono, 16 kHz, 16-bit PCM WAV.
+
+## CH9328 keyboard output
+
+The CH9328 is powered by and connected to the Windows computer through its own
+USB-C port. Connect only these signals between the UNO Q and CH9328:
+
+| UNO Q | CH9328 |
+| --- | --- |
+| D1 / TX | RX |
+| GND | GND |
+
+Do not connect the CH9328 VCC pin to the UNO Q. Both boards already have power,
+and they need only a common ground and the 3.3 V UART data signal.
+
+Before applying power, configure the CH9328 for Mode 3 as documented by Adafruit:
+switch 2 OFF, switches 3 and 4 ON. The sketch sends transparent ASCII at the
+default 9600 baud. Connect the CH9328 USB-C port to Windows.
+
+Keyboard output is deliberately opt-in. Place the cursor in a harmless test
+document, then run:
+
+```bash
+python3 python/main.py --mode local --seconds 5 --output keyboard
+```
+
+There is a three-second warning before typing begins. Use `--output both` to print
+and type, or change the delay with `--keyboard-delay`. The current implementation
+uses a US keyboard layout and converts smart punctuation and accented Latin text
+to ASCII. Unsupported symbols become `?`.
+
+## Privacy defaults
+
+- Audio is held in a temporary directory and deleted after transcription.
+- Transcripts are printed but not stored by default.
+- `.env`, models, recordings, and transcript files are excluded from Git.
+- Cloud mode should only be used when permitted for the information being dictated.
+
+## Planned milestones
+
+1. Prove USB microphone capture on the UNO Q.
+2. Benchmark local `whisper.cpp` transcription.
+3. Configure and test Azure Speech transcription.
+4. Add a physical push-to-talk button and local/cloud selector.
+5. Bench-test CH9328 keyboard output in a disposable text document.
+6. Add an e-ink status and review display.
+7. Add CSV timekeeping as a separate module.

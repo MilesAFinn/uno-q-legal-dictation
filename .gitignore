@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.env
+.venv/
+models/
+recordings/
+last_transcript.txt
+*.wav
+vendor/bin/
+vendor/models/
