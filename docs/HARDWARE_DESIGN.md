@@ -156,29 +156,20 @@ component placement.*
 74HC14 output --------------------------> UNO Q GPIO input
 ```
 
-When the button is released, the resistor pulls the inverter input high and its
-output is low. Pressing the button pulls the input low and produces a high GPIO
-signal. The capacitor suppresses short contact disturbances, while the
-Schmitt-trigger input provides clean switching as the capacitor charges and
-discharges.
 
-The `10 kOhm` and `100 nF` components have a nominal RC time constant of about
-1 ms. Firmware should still require a stable state for approximately 20-30 ms
-before accepting a press. Combining analog filtering, hysteresis, and software
-qualification is more reliable than relying on any one technique alone.
+
+The `10 kOhm` and `100 nF`  -- 10*3 * 100 * 10 **-9 = 10**-3 sec. rely on Schmitt trigger and software for additioal debouncing.
 
 ### SN74HC14N installation details
 
 - Pin 14 connects to 3.3 V and pin 7 connects to ground.
 - Place a 100 nF bypass capacitor directly between pins 14 and 7.
-- Do not leave either unused inverter input floating; tie each unused input to
+-tie each unused input to
   ground or 3.3 V.
-- Unused inverter outputs may remain disconnected.
-- Orient the socket notch and IC notch in the same direction and mark pin 1 on
-  the protoboard silkscreen or assembly drawing.
-- Fit and test the socket before inserting the IC.
+- Unused inverter outputs --disconnected.
+.
 
-One proposed gate assignment is:
+ gate assignment is:
 
 | Control | Inverter input | Inverter output | UNO Q input |
 | --- | ---: | ---: | --- |
@@ -189,14 +180,11 @@ One proposed gate assignment is:
 | Future push-to-talk | Pin 11 | Pin 10 | To be assigned |
 | Spare | Pin 13 | Pin 12 | Not connected |
 
-Until the fifth gate is used, pins 11 and 13 should be tied to ground and pins
-10 and 12 left disconnected. This table is a wiring proposal, not a substitute
-for checking the package diagram in the TI datasheet before assembly.
+
 
 ## LED behavior
 
-Each LED is driven from a dedicated GPIO through a 330 Ohm series resistor. A
-proposed initial status vocabulary is:
+
 
 | State | Indication |
 | --- | --- |
@@ -247,41 +235,4 @@ display alias, but it should not contain the Azure Speech credential. The Azure
 credential remains in the separately protected environment file already used by
 the speech launcher.
 
-## Mechanical and assembly notes
 
-- Prototype one button and one LED first, then reproduce the verified channel.
-- Use a common ground among the UNO Q, SN74HC14 circuit, PN532, and CH9328 UART
-  connection.
-- Do not connect the CH9328 VCC pin to the UNO Q when both devices are already
-  powered by their USB connections.
-- Mount the PN532 antenna behind plastic or wood, not directly against a metal
-  panel, ground plane, power supply, or large bundle of wiring.
-- Keep the 100 nF IC bypass capacitor leads short.
-- Use color-coded wiring consistently: red for 3.3 V, black for ground, and
-  distinct colors for signals.
-- Label both ends of every off-board cable before final assembly.
-- Check continuity and absence of shorts with power disconnected before
-  installing the IC or connecting the UNO Q.
-
-## Bring-up sequence
-
-1. Assemble the 3.3 V rail, ground rail, DIP socket, and bypass capacitor.
-2. Verify 3.3 V at socket pin 14 relative to pin 7 before inserting the IC.
-3. Build and test one button channel with a multimeter and a minimal GPIO sketch.
-4. Add the remaining three button channels and software debounce.
-5. Add LEDs one at a time and verify their current-limiting resistors.
-6. Connect the PN532 over I2C and confirm reliable reads using the supplied test
-   card before creating any matter mappings.
-7. Connect the CH9328 UART and test only in a disposable text document.
-8. Integrate the controls with local and Azure transcription.
-9. Perform power-cycle, unknown-tag, network-loss, and accidental-button tests.
-
-## Future expansion
-
-- A dedicated push-to-talk button using a fifth `SN74HC14N` gate.
-- An e-ink display showing mode, selected matter alias, transcript review, and
-  keyboard-output state.
-- A lockable or removable matter-tag set.
-- CSV time-entry creation and controlled submission to the PatVault API.
-- A fabricated PCB after the protoboard circuit and connector placement have
-  been validated in regular use.
