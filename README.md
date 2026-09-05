@@ -7,6 +7,18 @@ audio is deleted automatically. An Adafruit CH9328 breakout provides USB keyboar
 output without requiring a Windows companion application. Timekeeping and an
 e-ink display are deferred until the speech pipeline is proven.
 
+## Hardware engineering
+
+The planned control console combines an `SN74HC14N` Schmitt-trigger button
+interface, dedicated status LEDs, a PN532 RFID/NFC matter selector, and the
+CH9328 USB keyboard bridge. The design includes a purchase-ready bill of
+materials, preliminary pin allocation, debounce circuit, privacy model, and
+staged bring-up procedure in [Hardware Control Console](docs/HARDWARE_DESIGN.md).
+
+The speech pipeline has been proven on the UNO Q. The physical controls and RFID
+subsystems are documented as the next prototyping stage rather than represented
+as completed hardware.
+
 ## Current milestone
 
 - Capture mono 16 kHz, 16-bit WAV audio through ALSA.
