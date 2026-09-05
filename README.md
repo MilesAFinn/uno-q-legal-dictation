@@ -1,6 +1,7 @@
 # UNO Q Legal Dictation
+September 2026
 
-This Arduino App Lab project captures a short utterance from a USB microphone and
+This Arduino project captures a short utterance from a USB microphone and
 transcribes it with either a local `whisper.cpp` model or Azure Speech. Temporary
 audio is deleted automatically. An Adafruit CH9328 breakout provides USB keyboard
 output without requiring a Windows companion application. Timekeeping and an
@@ -35,7 +36,7 @@ uno_q_legal_dictation/
 ## UNO Q prerequisites
 
 Connect a USB microphone through a powered USB-C hub. On the UNO Q Debian side,
-verify that ALSA can see it:
+verify that Advanced Linux Sound Architecture ("ALSA") can see it:
 
 ```bash
 python3 python/main.py --list-microphones
@@ -80,7 +81,7 @@ python3 python/main.py --mode local --audio-file sample.wav
 python3 python/main.py --mode azure --audio-file sample.wav
 ```
 
-For the App Lab Run button, place the audio at `data/input.wav`. If that file is
+For the Run button, place the audio at `data/input.wav`. If that file is
 present, the app transcribes it instead of opening a microphone. Remove or rename
 it to return to microphone capture. `AUDIO_FILE` may also supply a path without a
 command-line argument. Local input must be mono, 16 kHz, 16-bit PCM WAV.
@@ -124,7 +125,7 @@ to ASCII. Unsupported symbols become `?`.
 ## Planned milestones
 
 1. Prove USB microphone capture on the UNO Q.
-2. Benchmark local `whisper.cpp` transcription.
+2. Benchmark local `whisper.cpp` transcription.***DEFER***
 3. Configure and test Azure Speech transcription.
 4. Add a physical push-to-talk button and local/cloud selector.
 5. Bench-test CH9328 keyboard output in a disposable text document.
