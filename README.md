@@ -62,7 +62,6 @@ python3 -m venv ~/.venvs/uno-q-legal-dictation
 ~/.venvs/uno-q-legal-dictation/bin/python -m pip install -r python/requirements.txt
 ```
 
-Do not put Azure credentials in this repository or in `app.yaml`.
 
 ## Azure mode
 
@@ -165,6 +164,6 @@ to ASCII. Unsupported symbols become `?`.
 3. Configure and test Azure Speech transcription.  *** done *** 
 4. Add a physical push-to-talk button and local/cloud selector.
 5. Bench-test CH9328 keyboard output in a disposable text document.
-6. Add an e-ink status and review display.
-7. Integrate with PatVault.com API "Q send me patent number eight one two three four five six."
+6. Add an e-ink status and review display.  *** done *** 
+7. Integrate with PatVault.com API "Q send me patent number eight one two three four five six." *** done *** 
 8. Add CSV timekeeping as a separate module.
