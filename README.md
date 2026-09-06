@@ -7,6 +7,8 @@ audio is deleted automatically. An Adafruit CH9328 breakout provides USB keyboar
 output without requiring a Windows companion application. Timekeeping and an
 e-ink display are deferred until the speech pipeline is proven.
 
+## related project https://github.com/MilesAFinn/patent_pdf_voice_comm___   (Private, includes PTT details)
+
 ## Hardware engineering
 
 The planned control console combines an `SN74HC14N` Schmitt-trigger button
